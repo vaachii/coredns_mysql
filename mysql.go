@@ -5,8 +5,11 @@ import (
 	"strings"
 	"time"
 
+	clog "github.com/coredns/coredns/plugin/pkg/log"
 	"github.com/miekg/dns"
 )
+
+var log = clog.NewWithPlugin("mysql")
 
 func (handler *CoreDNSMySql) findRecord(zone string, name string, types ...string) ([]*Record, error) {
 	db, err := handler.db()
@@ -106,6 +109,8 @@ func (handler *CoreDNSMySql) loadZones() error {
 
 	handler.lastZoneUpdate = time.Now()
 	handler.zones = zones
+
+	log.Debugf("zones = %+v\n", zones)
 
 	return nil
 }
